@@ -130,25 +130,25 @@ data:extend({
 	{
 		type = "item-subgroup",
 		name = "concrete",
-		group = "logistics",
+		group = "terrain",
 		order = "i2"
 	},
 	{
 		type = "item-subgroup",
 		name = "terrain-lifting",
-		group = "logistics",
+		group = "terrain",
 		order = "i3"
 	},
 	{
 		type = "item-subgroup",
 		name = "waterfill",
-		group = "logistics",
+		group = "terrain",
 		order = "i4"
 	},
 	{
 		type = "item-subgroup",
 		name = "soil-improvement",
-		group = "logistics",
+		group = "terrain",
 		order = "i5"
 	},
 -------------------------------------------------------------------------- BARRELING

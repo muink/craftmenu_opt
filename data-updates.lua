@@ -1,7 +1,7 @@
 
 require("lualib.functions")
 
-local entity_list = {
+entity_list = {
 	------------------------------------------------ LOGISTICS
 	{"underground-belt","underground-belt"},
 	{"splitter","splitter"},
@@ -32,36 +32,36 @@ local entity_list = {
 	{{
 		"fusion-reactor.fusion-reactor",
 		"fusion-generator.fusion-generator",
-	},"fusion-energy"}, ---------------- space-age
+	},"fusion-energy"}, ---- space-age
 	{"beacon","beacon"},
 	------------------------------------------------ SCIENCE
 	{"lab","lab"},
 }
 
-local item_list = {
+item_list = {
 	------------------------------------------------ TERRAIN
 	{{
-		"wubefill",
-		"waterfill",
-		"deepwaterfill",
-		"waterfill-green",
-		"deepwaterfill-green",
-		"shallowwaterfill",
-		"mudwaterfill",
-	},"waterfill"}, ---------------- waterfill
+		"item.wubefill",
+		"item.waterfill",
+		"item.deepwaterfill",
+		"item.waterfill-green",
+		"item.deepwaterfill-green",
+		"item.shallowwaterfill",
+		"item.mudwaterfill",
+	},"waterfill"}, ---- waterfill
 	{{
-		"artificial-yumako-soil",
-		"overgrowth-yumako-soil",
-		"artificial-jellynut-soil",
-		"overgrowth-jellynut-soil",
-	},"soil-improvement"}, ---------------- space-age
+		"item.artificial-yumako-soil",
+		"item.overgrowth-yumako-soil",
+		"item.artificial-jellynut-soil",
+		"item.overgrowth-jellynut-soil",
+	},"soil-improvement"}, ---- space-age
 }
 
-local subgroup_list = {
+subgroup_list = {
 	------------------------------------------------ PRODUCTION
 	{"module",nil,"f[module]"},
-	{"agriculture",nil,"e5"}, ---------------- space-age
-	{"environmental-protection",nil,"e6"}, ---------------- space-age
+	{"agriculture",nil,"e5"}, ---- space-age
+	{"environmental-protection",nil,"e6"}, ---- space-age
 	------------------------------------------------ SCIENCE
 	{"science-pack","science"},
 	------------------------------------------------ BARRELING
@@ -72,22 +72,34 @@ local subgroup_list = {
 	},"barreling"},
 }
 
-local group_list = {
+group_list = {
 	------------------------------------------------ CIRCUIT
-	{"circuit","g[circuit]"}, ---------------- SchallCircuitGroup
+	{"circuit","g[circuit]"}, ---- SchallCircuitGroup
 	------------------------------------------------ SIGNALS
 	{"signals","g[signals]"},
 }
 
-
-
--------------------------------------------------------------------------- dectorio
+-------------------------------------------------------------------------- COMPAT
+---- dectorio
 if data.raw["item-group"]["dectorio"] then
+	require("compat.dectorio")
+else
 	-- item_list
 	for _, tbl in pairs({
 	------------------------------------------------ TERRAIN
-		{"ice-platform","landscaping-earthworks","b[landfill]-f[ice-platform]"}, ---------------- space-age
-		{"foundation","landscaping-earthworks","b[landfill]-g[foundation]"}, ---------------- space-age
+		{{
+			"item.stone-brick",
+			"item.concrete",
+			"item.hazard-concrete",
+			"item.refined-concrete",
+			"item.refined-hazard-concrete",
+		},"concrete"},
+		{{
+			"item.landfill",
+			"item.ice-platform", ---- space-age
+			"item.foundation", ---- space-age
+			"capsule.cliff-explosives",
+		},"terrain-lifting"},
 	}) do
 		table.insert(item_list, tbl)
 	end
@@ -95,39 +107,20 @@ if data.raw["item-group"]["dectorio"] then
 	-- subgroup_list
 	for _, tbl in pairs({
 	------------------------------------------------ TERRAIN
-		{"waterfill","dectorio","l-b-a[waterfill]"}, ---------------- waterfill
-		{"soil-improvement","dectorio","l-b-b[spaceage]"}, ---------------- space-age
+		{"textplates","terrain"}, ---- textplates
 	}) do
 		table.insert(subgroup_list, tbl)
-	end
-else
-	-- item_list
-	for _, tbl in pairs({
-	------------------------------------------------ TERRAIN
-		{{
-			"stone-brick",
-			"concrete",
-			"hazard-concrete",
-			"refined-concrete",
-			"refined-hazard-concrete",
-		},"concrete"},
-		{{
-			"landfill",
-			"ice-platform", ---------------- space-age
-			"foundation", ---------------- space-age
-			"cliff-explosives",
-		},"terrain-lifting"},
-	}) do
-		table.insert(item_list, tbl)
 	end
 end
 
 
 
--- sort entities
-for _, args in pairs(entity_list) do
+-- sort entities & items
+for _, list in pairs({entity_list, item_list}) do
+for _, args in pairs(list) do
 	local protos = {}
 	local subgroup = args[2]
+	local order = args[3]
 
 	if type(args[1]) == "string" then
 		protos = get_data(args[1])
@@ -139,24 +132,10 @@ for _, args in pairs(entity_list) do
 
 	if protos then
 		for _, proto in pairs(protos) do
-			update_entity(proto, subgroup)
+			update_proto(proto, subgroup, order)
 		end
 	end
 end
-
--- sort items
-for _, args in pairs(item_list) do
-	local ids = args[1]
-	local subgroup = args[2]
-	local order = args[3]
-
-	if type(args[1]) == "string" then
-		ids = {args[1]}
-	end
-
-	for _, id in pairs(ids) do
-		update_item_recipe(id, subgroup, order)
-	end
 end
 
 -- sort subgroups
@@ -184,6 +163,13 @@ end
 
 
 
+-------------------------------------------------------------------------- LOGISTICS
+--[[
+if mods["space-age"] then
+	data.raw["recipe"]["casting-pipe"].hide_from_player_crafting = true
+	data.raw["recipe"]["casting-pipe-to-ground"].hide_from_player_crafting = true
+end
+--]]
 -------------------------------------------------------------------------- PRODUCTION
 -- entities
 for _, proto in pairs(data.raw["assembling-machine"]) do
@@ -204,6 +190,7 @@ for _, proto in pairs(data.raw["module"]) do
 		}
 	})
 
+	proto.subgroup = subgroup
 	update_item_recipe(id, subgroup)
 end
 -------------------------------------------------------------------------- SCIENCE

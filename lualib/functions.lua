@@ -49,29 +49,23 @@ function update_subgroup(id, group, order)
 end
 
 function update_item_recipe(id, subgroup, order)
-	if data.raw.item[id] then
-		if subgroup then
-			data.raw.item[id].subgroup = subgroup
-		end
-		if order then
-			data.raw.item[id].order = order
-		end
-	end
-	if data.raw.recipe[id] then
-		if subgroup then
-			data.raw.recipe[id].subgroup = subgroup
-		end
-		if order then
-			data.raw.recipe[id].order = order
+	for _, type in pairs({"item","recipe"}) do
+		if data.raw[type][id] then
+			if subgroup then
+				data.raw[type][id].subgroup = subgroup
+			end
+			if order then
+				data.raw[type][id].order = order
+			end
 		end
 	end
 end
 
-function update_entity(proto, subgroup)
+function update_proto(proto, subgroup, order)
 	local id = proto.name
 
 	proto.subgroup = subgroup
-	update_item_recipe(id, subgroup)
+	update_item_recipe(id, subgroup, order)
 end
 
 function classify_assembling(proto)
@@ -80,29 +74,29 @@ function classify_assembling(proto)
 	-- vanilla
 	-- basic-crafting, crafting, advanced-crafting, crafting-with-fluid ...
 	if includes({"basic-crafting", "crafting", "advanced-crafting"}, proto.crafting_categories[1]) then
-		update_entity(proto, "assembling-machine")
+		update_proto(proto, "assembling-machine")
 		return
 	end
 	if proto.crafting_categories[1] == "smelting" then
-		update_entity(proto, "smelting-machine")
+		update_proto(proto, "smelting-machine")
 		return
 	end
 	if proto.crafting_categories[1] == "oil-processing" then
-		update_entity(proto, "chemistry-machine")
+		update_proto(proto, "chemistry-machine")
 		return
 	end
 	if proto.crafting_categories[1] == "chemistry" then
-		update_entity(proto, "chemistry-machine")
+		update_proto(proto, "chemistry-machine")
 		return
 	end
 	if proto.crafting_categories[1] == "centrifuging" then
-		update_entity(proto, "assembling-machine"--[["centrifuging-machine"--]])
+		update_proto(proto, "assembling-machine"--[["centrifuging-machine"--]])
 		return
 	end
 
 	-- space-age
 	if includes({"metallurgy", "electromagnetics", "cryogenics"}, proto.crafting_categories[1]) then
-		update_entity(proto, "spaceage-machine")
+		update_proto(proto, "spaceage-machine")
 		return
 	end
 	if includes({"organic", "captive-spawner-process"}, proto.crafting_categories[1]) then
