@@ -55,6 +55,39 @@ item_list = {
 		"item.artificial-jellynut-soil",
 		"item.overgrowth-jellynut-soil",
 	},"soil-improvement"}, ---- space-age
+	------------------------------------------------ COMBAT
+	{{
+		"ammo.firearm-magazine",
+		"ammo.piercing-rounds-magazine",
+		"ammo.uranium-rounds-magazine",
+	},"bullet-ammo"},
+	{{
+		"ammo.shotgun-shell",
+		"ammo.piercing-shotgun-shell",
+	},"shotgun-ammo"},
+	{{
+		"ammo.cannon-shell",
+		"ammo.explosive-cannon-shell",
+		"ammo.uranium-cannon-shell",
+		"ammo.explosive-uranium-cannon-shell",
+	},"cannon-ammo"},
+	{{
+		"ammo.rocket",
+		"ammo.explosive-rocket",
+		"ammo.atomic-bomb",
+		"ammo.capture-robot-rocket", ---- space-age
+	},"rocket-ammo"},
+	{{
+		"ammo.flamethrower-ammo",
+		"ammo.railgun-ammo", ---- space-age
+		"ammo.tesla-ammo", ---- space-age
+	},"special-ammo"},
+	{{
+		"ammo.artillery-shell",
+		"ammo.atomic-artillery-shell",
+		"ammo.napalm-artillery-shell",
+		"ammo.poison-artillery-shell",
+	},"artillery-ammo"},
 }
 
 subgroup_list = {
@@ -195,3 +228,13 @@ for _, proto in pairs(data.raw["module"]) do
 end
 -------------------------------------------------------------------------- SCIENCE
 require("prototypes.item.science-pack")
+-------------------------------------------------------------------------- COMBAT
+-- combat-robot-capsules
+for _, proto in pairs(data.raw["combat-robot"]) do
+	local id = proto.name
+	local subgroup = "combat-robot"
+
+	proto.subgroup = subgroup
+	data.raw["capsule"][id .. "-capsule"].subgroup = subgroup
+	update_item_recipe(id, subgroup)
+end

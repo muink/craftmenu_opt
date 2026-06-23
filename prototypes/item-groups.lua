@@ -151,6 +151,55 @@ data:extend({
 		group = "terrain",
 		order = "i5"
 	},
+-------------------------------------------------------------------------- COMBAT
+	{
+		type = "item-subgroup",
+		name = "bullet-ammo",
+		group = "combat",
+		order = "b1"
+	},
+	{
+		type = "item-subgroup",
+		name = "shotgun-ammo",
+		group = "combat",
+		order = "b2"
+	},
+	{
+		type = "item-subgroup",
+		name = "cannon-ammo",
+		group = "combat",
+		order = "b3"
+	},
+	{
+		type = "item-subgroup",
+		name = "rocket-ammo",
+		group = "combat",
+		order = "b4"
+	},
+	{
+		type = "item-subgroup",
+		name = "special-ammo",
+		group = "combat",
+		order = "b5"
+	},
+	{
+		type = "item-subgroup",
+		name = "artillery-ammo",
+		group = "combat",
+		order = "b6"
+	},
+	{
+		type = "item-subgroup",
+		name = "explosive",
+		group = "combat",
+		order = "c1"
+	},
+	{
+		type = "item-subgroup",
+		name = "combat-robot",
+		group = "combat",
+		order = "c2"
+	},
 -------------------------------------------------------------------------- BARRELING
 	{
 		type = "item-group",
