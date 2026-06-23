@@ -58,6 +58,25 @@ local item_list = {
 }
 
 local subgroup_list = {
+	------------------------------------------------ PRODUCTION
+	{"module",nil,"f[module]"},
+	{"agriculture",nil,"e5"}, ---------------- space-age
+	{"environmental-protection",nil,"e6"}, ---------------- space-age
+	------------------------------------------------ SCIENCE
+	{"science-pack","science"},
+	------------------------------------------------ BARRELING
+	{{
+		"barrel",
+		"fill-barrel",
+		"empty-barrel",
+	},"barreling"},
+}
+
+local group_list = {
+	------------------------------------------------ CIRCUIT
+	{"circuit","g[circuit]"}, ---------------- SchallCircuitGroup
+	------------------------------------------------ SIGNALS
+	{"signals","g[signals]"},
 }
 
 
@@ -76,8 +95,8 @@ if data.raw["item-group"]["dectorio"] then
 	-- subgroup_list
 	for _, tbl in pairs({
 	------------------------------------------------ TERRAIN
-		{"waterfill","dectorio","l-b[waterfill]"}, ---------------- waterfill
-		{"soil-improvement","dectorio","l-b-a[spaceage]"}, ---------------- space-age
+		{"waterfill","dectorio","l-b-a[waterfill]"}, ---------------- waterfill
+		{"soil-improvement","dectorio","l-b-b[spaceage]"}, ---------------- space-age
 	}) do
 		table.insert(subgroup_list, tbl)
 	end
@@ -155,16 +174,17 @@ for _, args in pairs(subgroup_list) do
 	end
 end
 
+-- sort groups
+for _, args in pairs(group_list) do
+	local id = args[1]
+	local order = args[2]
+
+	update_group(id, order)
+end
+
 
 
 -------------------------------------------------------------------------- PRODUCTION
--- subgroup
-data.raw["item-subgroup"]["module"].order = "f[module]"
-if mods["space-age"] then
-	data.raw["item-subgroup"]["agriculture"].order = "e5"
-	data.raw["item-subgroup"]["environmental-protection"].order = "e6"
-end
-
 -- entities
 for _, proto in pairs(data.raw["assembling-machine"]) do
 	classify_assembling(proto)
@@ -187,38 +207,4 @@ for _, proto in pairs(data.raw["module"]) do
 	update_item_recipe(id, subgroup)
 end
 -------------------------------------------------------------------------- SCIENCE
--- subgroup
-data.raw["item-subgroup"]["science-pack"].group = "science"
-
-require("stage3.science-pack")
--------------------------------------------------------------------------- BARRELING
--- subgroup
-data.raw["item-subgroup"]["barrel"].group = "barreling"
-data.raw["item-subgroup"]["fill-barrel"].group = "barreling"
-data.raw["item-subgroup"]["empty-barrel"].group = "barreling"
-
--- barreling
---[[
-for _, fluid in pairs(data.raw["fluid"]) do
-	local fluid_barrel = fluid.name .. "-barrel"
-	if data.raw.recipe["empty-" .. fluid_barrel] then
-		data.raw.recipe["empty-" .. fluid_barrel].subgroup = "empty-barrel"
-		if data.raw.recipe[fluid_barrel] then
-			data.raw.recipe[fluid_barrel].subgroup = "fill-barrel"
-		elseif data.raw.recipe["fill-" .. fluid_barrel] then
-			data.raw.recipe["fill-" .. fluid_barrel].subgroup = "fill-barrel"
-		end
-		if data.raw.item[fluid_barrel] then
-			data.raw.item[fluid_barrel].subgroup = "barrel"
-		end
-	end
-end
---]]
--------------------------------------------------------------------------- CIRCUIT
--- group
-if data.raw["item-group"]["circuit"] then
-	data.raw["item-group"]["circuit"].order = "g[circuit]"
-end
--------------------------------------------------------------------------- SIGNALS
--- group
-data.raw["item-group"]["signals"].order = "g[signals]"
+require("prototypes.item.science-pack")

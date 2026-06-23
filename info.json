@@ -11,6 +11,7 @@
     "? space-age >= 2.0.0",
     "SchallCircuitGroup",
     "SchallTransportGroup",
+    "? AmmoGroup",
     "? Dectorio",
     "? textplates",
     "? Waterfill_v17",
