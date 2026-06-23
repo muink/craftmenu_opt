@@ -119,6 +119,38 @@ data:extend({
 		group = "science",
 		order = "0[lab]",
 	},
+-------------------------------------------------------------------------- TERRAIN
+	{
+		type = "item-group",
+		name = "terrain",
+		order = "d-terrain",
+		icon = "__base__/graphics/technology/concrete.png",
+		icon_size = 256,
+	},
+	{
+		type = "item-subgroup",
+		name = "concrete",
+		group = "logistics",
+		order = "i2"
+	},
+	{
+		type = "item-subgroup",
+		name = "terrain-lifting",
+		group = "logistics",
+		order = "i3"
+	},
+	{
+		type = "item-subgroup",
+		name = "waterfill",
+		group = "logistics",
+		order = "i4"
+	},
+	{
+		type = "item-subgroup",
+		name = "soil-improvement",
+		group = "logistics",
+		order = "i5"
+	},
 -------------------------------------------------------------------------- BARRELING
 	{
 		type = "item-group",

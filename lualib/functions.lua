@@ -29,12 +29,27 @@ function includes(tbl, val)
 	return false
 end
 
-function update_item_recipe(id, subgroup)
+function update_subgroup(id, group, order)
+	if data.raw["item-subgroup"][id] then
+		data.raw["item-subgroup"][id].group = group
+		if order then
+			data.raw["item-subgroup"][id].order = order
+		end
+	end
+end
+
+function update_item_recipe(id, subgroup, order)
 	if data.raw.item[id] then
 		data.raw.item[id].subgroup = subgroup
+		if order then
+			data.raw.item[id].order = order
+		end
 	end
 	if data.raw.recipe[id] then
 		data.raw.recipe[id].subgroup = subgroup
+		if order then
+			data.raw.recipe[id].order = order
+		end
 	end
 end
 

@@ -38,6 +38,72 @@ local entity_list = {
 	{"lab","lab"},
 }
 
+local item_list = {
+	------------------------------------------------ TERRAIN
+	{{
+		"wubefill",
+		"waterfill",
+		"deepwaterfill",
+		"waterfill-green",
+		"deepwaterfill-green",
+		"shallowwaterfill",
+		"mudwaterfill",
+	},"waterfill"}, ---------------- waterfill
+	{{
+		"artificial-yumako-soil",
+		"overgrowth-yumako-soil",
+		"artificial-jellynut-soil",
+		"overgrowth-jellynut-soil",
+	},"soil-improvement"}, ---------------- space-age
+}
+
+local subgroup_list = {
+}
+
+
+
+-------------------------------------------------------------------------- dectorio
+if data.raw["item-group"]["dectorio"] then
+	-- item_list
+	for _, tbl in pairs({
+	------------------------------------------------ TERRAIN
+		{"ice-platform","landscaping-earthworks","b[landfill]-f[ice-platform]"}, ---------------- space-age
+		{"foundation","landscaping-earthworks","b[landfill]-g[foundation]"}, ---------------- space-age
+	}) do
+		table.insert(item_list, tbl)
+	end
+
+	-- subgroup_list
+	for _, tbl in pairs({
+	------------------------------------------------ TERRAIN
+		{"waterfill","dectorio","l-b[waterfill]"}, ---------------- waterfill
+		{"soil-improvement","dectorio","l-b-a[spaceage]"}, ---------------- space-age
+	}) do
+		table.insert(subgroup_list, tbl)
+	end
+else
+	-- item_list
+	for _, tbl in pairs({
+	------------------------------------------------ TERRAIN
+		{{
+			"stone-brick",
+			"concrete",
+			"hazard-concrete",
+			"refined-concrete",
+			"refined-hazard-concrete",
+		},"concrete"},
+		{{
+			"landfill",
+			"ice-platform", ---------------- space-age
+			"foundation", ---------------- space-age
+			"cliff-explosives",
+		},"terrain-lifting"},
+	}) do
+		table.insert(item_list, tbl)
+	end
+end
+
+
 
 -- sort entities
 for _, args in pairs(entity_list) do
@@ -58,6 +124,38 @@ for _, args in pairs(entity_list) do
 		end
 	end
 end
+
+-- sort items
+for _, args in pairs(item_list) do
+	local ids = args[1]
+	local subgroup = args[2]
+	local order = args[3]
+
+	if type(args[1]) == "string" then
+		ids = {args[1]}
+	end
+
+	for _, id in pairs(ids) do
+		update_item_recipe(id, subgroup, order)
+	end
+end
+
+-- sort subgroups
+for _, args in pairs(subgroup_list) do
+	local ids = args[1]
+	local group = args[2]
+	local order = args[3]
+
+	if type(args[1]) == "string" then
+		ids = {args[1]}
+	end
+
+	for _, id in pairs(ids) do
+		update_subgroup(id, group, order)
+	end
+end
+
+
 
 -------------------------------------------------------------------------- PRODUCTION
 -- subgroup
