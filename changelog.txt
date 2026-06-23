@@ -1,5 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 2026-06-23
+  Changes:
+    - Sort terrain pages
+    - Add Waterfill, Dectorio compatibility
+---------------------------------------------------------------------------------------------------
 Version: 0.6.1
 Date: 2026-06-22
   Changes:
-    - sort logistics, production, science, barreling, circuit, signals pages
+    - Sort logistics, production, science, barreling, circuit, signals pages
