@@ -9,10 +9,10 @@
   "dependencies": [
     "base >= 2.0.0",
     "? space-age >= 2.0.0",
-    "? SchallCircuitGroup",
-    "? SchallTransportGroup",
-    "? LoaderUnlockerFork",
+    "SchallCircuitGroup",
+    "SchallTransportGroup",
     "? Dectorio",
+    "? LoaderUnlockerFork",
     "! assembler-group",
     "! barreling-group2",
     "! science-tab"

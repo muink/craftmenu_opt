@@ -1,82 +1,5 @@
 
-local function get_data(keys)
-    if type(keys) == "string" then
-        local t = {}
-
-        for part in string.gmatch(keys, "[^.]+") do
-            table.insert(t, part)
-        end
-        keys = t
-    end
-
-	local current = data.raw
-	for _, key in ipairs(keys) do
-		if type(current) == "table" then
-			current = current[key]
-		else
-			return nil
-		end
-	end
-	return current
-end
-
-local function includes(tbl, val)
-	for _, item in ipairs(tbl) do
-		if item == val then
-			return true
-		end
-	end
-	return false
-end
-
-local function update_entity(proto, subgroup)
-	local id = proto.name
-
-	proto.subgroup = subgroup
-	if data.raw.item[id] then
-		data.raw.item[id].subgroup = subgroup
-	end
-	if data.raw.recipe[id] then
-		data.raw.recipe[id].subgroup = subgroup
-	end
-end
-
-local function classify_assembling(proto)
-	--prototypes.categories.recipe-category
-
-	-- vanilla
-	-- basic-crafting, crafting, advanced-crafting, crafting-with-fluid ...
-	if includes({"basic-crafting", "crafting", "advanced-crafting"}, proto.crafting_categories[1]) then
-		update_entity(proto, "assembling-machine")
-		return
-	end
-	if proto.crafting_categories[1] == "smelting" then
-		update_entity(proto, "smelting-machine")
-		return
-	end
-	if proto.crafting_categories[1] == "oil-processing" then
-		update_entity(proto, "chemistry-machine")
-		return
-	end
-	if proto.crafting_categories[1] == "chemistry" then
-		update_entity(proto, "chemistry-machine")
-		return
-	end
-	if proto.crafting_categories[1] == "centrifuging" then
-		update_entity(proto, "assembling-machine"--[["centrifuging-machine"--]])
-		return
-	end
-
-	-- space-age
-	if includes({"metallurgy", "electromagnetics", "cryogenics"}, proto.crafting_categories[1]) then
-		update_entity(proto, "spaceage-machine")
-		return
-	end
-	if includes({"organic", "captive-spawner-process"}, proto.crafting_categories[1]) then
-		return
-	end
-end
-
+require("lualib.functions")
 
 local entity_list = {
 	------------------------------------------------ LOGISTICS
@@ -106,17 +29,15 @@ local entity_list = {
 		"offshore-pump.offshore-pump",
 		"mining-drill.pumpjack",
 	},"fluid-extraction-machine"},
+	{{
+		"fusion-reactor.fusion-reactor",
+		"fusion-generator.fusion-generator",
+	},"fusion-energy"}, ---------------- space-age
 	{"beacon","beacon"},
 	------------------------------------------------ SCIENCE
 	{"lab","lab"},
 }
-if mods["space-age"] then
-	------------------------------------------------ PRODUCTION
-	table.insert(entity_list, {{
-		"fusion-reactor.fusion-reactor",
-		"fusion-generator.fusion-generator",
-	},"fusion-energy"})
-end
+
 
 -- sort entities
 for _, args in pairs(entity_list) do
@@ -131,13 +52,13 @@ for _, args in pairs(entity_list) do
 		end
 	end
 
-	for _, proto in pairs(protos) do
-		update_entity(proto, subgroup)
+	if protos then
+		for _, proto in pairs(protos) do
+			update_entity(proto, subgroup)
+		end
 	end
 end
 
-
--------------------------------------------------------------------------- LOGISTICS
 -------------------------------------------------------------------------- PRODUCTION
 -- subgroup
 data.raw["item-subgroup"]["module"].order = "f[module]"
@@ -151,7 +72,22 @@ for _, proto in pairs(data.raw["assembling-machine"]) do
 	classify_assembling(proto)
 end
 
-require("stage3.module")
+-- modules
+for _, proto in pairs(data.raw["module"]) do
+	local id = proto.name
+	local subgroup = proto.category .. "-module"
+
+	data:extend({
+		{
+			type = "item-subgroup",
+			name = subgroup,
+			group = "production",
+			order = "f[" .. proto.category .."]",
+		}
+	})
+
+	update_item_recipe(id, subgroup)
+end
 -------------------------------------------------------------------------- SCIENCE
 -- subgroup
 data.raw["item-subgroup"]["science-pack"].group = "science"
@@ -163,10 +99,26 @@ data.raw["item-subgroup"]["barrel"].group = "barreling"
 data.raw["item-subgroup"]["fill-barrel"].group = "barreling"
 data.raw["item-subgroup"]["empty-barrel"].group = "barreling"
 
---require("stage3.barreling")
+-- barreling
+--[[
+for _, fluid in pairs(data.raw["fluid"]) do
+	local fluid_barrel = fluid.name .. "-barrel"
+	if data.raw.recipe["empty-" .. fluid_barrel] then
+		data.raw.recipe["empty-" .. fluid_barrel].subgroup = "empty-barrel"
+		if data.raw.recipe[fluid_barrel] then
+			data.raw.recipe[fluid_barrel].subgroup = "fill-barrel"
+		elseif data.raw.recipe["fill-" .. fluid_barrel] then
+			data.raw.recipe["fill-" .. fluid_barrel].subgroup = "fill-barrel"
+		end
+		if data.raw.item[fluid_barrel] then
+			data.raw.item[fluid_barrel].subgroup = "barrel"
+		end
+	end
+end
+--]]
 -------------------------------------------------------------------------- CIRCUIT
 -- group
-if mods["SchallCircuitGroup"] then
+if data.raw["item-group"]["circuit"] then
 	data.raw["item-group"]["circuit"].order = "g[circuit]"
 end
 -------------------------------------------------------------------------- SIGNALS

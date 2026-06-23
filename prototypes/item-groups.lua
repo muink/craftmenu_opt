@@ -109,7 +109,7 @@ data:extend({
 	{
 		type = "item-group",
 		name = "science",
-		order = "c[science]",
+		order = "c-science",
 		icon = icon_science,
 		icon_size = 256,
 	},
