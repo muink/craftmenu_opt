@@ -4,7 +4,7 @@
   "title": "Crafting menu readability",
   "description": "Sort and group the recipes in the crafting menu to improve readability.",
   "author": "muink",
-  "homepage": "https://github.com/muink/craftmenu_opt",
+  "homepage": "https://mods.factorio.com/mod/craftmenu_opt",
   "factorio_version": "2.0",
   "dependencies": [
     "base >= 2.0.0",
