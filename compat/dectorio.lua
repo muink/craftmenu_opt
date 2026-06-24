@@ -13,6 +13,7 @@ for _, tbl in pairs({
 ------------------------------------------------ TERRAIN
 	{"waterfill","dectorio","l-b-a[waterfill]"}, ---------------- waterfill
 	{"soil-improvement","dectorio","l-b-b[spaceage]"}, ---------------- space-age
+	{"factorio-logo","dectorio"}, ---- factorio-logo/wubefill
 }) do
 	table.insert(subgroup_list, tbl)
 end

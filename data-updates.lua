@@ -36,12 +36,21 @@ entity_list = {
 	{"beacon","beacon"},
 	------------------------------------------------ SCIENCE
 	{"lab","lab"},
+	------------------------------------------------ TERRAIN
+	{{
+		"assembling-machine.factorio-logo-small",
+		"assembling-machine.factorio-logo-medium",
+		"assembling-machine.factorio-logo-large",
+		"assembling-machine.factorio-space-age-logo-small",
+		"assembling-machine.factorio-space-age-logo-medium",
+		"assembling-machine.factorio-space-age-logo-large",
+		"simple-entity-with-owner.wubefill-space-logo",
+	},"factorio-logo"}, ---- factorio-logo
 }
 
 item_list = {
 	------------------------------------------------ TERRAIN
 	{{
-		"item.wubefill",
 		"item.waterfill",
 		"item.deepwaterfill",
 		"item.waterfill-green",
@@ -55,6 +64,9 @@ item_list = {
 		"item.artificial-jellynut-soil",
 		"item.overgrowth-jellynut-soil",
 	},"soil-improvement"}, ---- space-age
+	{{
+		"item.wubefill",
+	},"factorio-logo"}, ---- wubefill
 	------------------------------------------------ COMBAT
 	{{
 		"ammo.firearm-magazine",

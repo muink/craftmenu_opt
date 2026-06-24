@@ -151,6 +151,12 @@ data:extend({
 		group = "terrain",
 		order = "i5"
 	},
+	{
+		type = "item-subgroup",
+		name = "factorio-logo",
+		group = "terrain",
+		order = "w"
+	},
 -------------------------------------------------------------------------- COMBAT
 	{
 		type = "item-subgroup",
